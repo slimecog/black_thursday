@@ -42,4 +42,8 @@ class InvoiceItemRepo
   def find_item_by_item_id(id)
     sales_engine.find_item_by_item_id(id)
   end
+
+  def inspect
+    "#<#{self.class} #{invoice_items.size} rows>"
+  end
 end
