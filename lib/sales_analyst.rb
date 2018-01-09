@@ -343,9 +343,25 @@ class SalesAnalyst
   end
   memoize :convert_revenue_to_merchants
 
+  def merchants_ranked_by_revenue
+    convert_revenue_to_merchants
+  end
+
   def top_revenue_earners(count = 20)
     merchants = convert_revenue_to_merchants
     merchants.first(count)
   end
   memoize :top_revenue_earners
+
+  def merchants_with_invalid_invoices
+    invalid_invoices.map do |invoice|
+      invoice.merchant_id
+    end.uniq
+  end
+
+  def merchants_with_pending_invoices
+    merchants_with_invalid_invoices.map do |merchant_id|
+      sales_engine.merchants.find_by_id(merchant_id)
+    end
+  end
 end
