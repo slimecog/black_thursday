@@ -106,4 +106,20 @@ class InvoiceItemRepoTest < Minitest::Test
     assert_instance_of Item, iir.find_item_by_item_id(263500432)
     assert_equal 263500432, iir.find_item_by_item_id(263500432).id
   end
+
+  def test_inspect_shortens_output
+    se = SalesEngine.from_csv({
+      :items         => "./test/fixtures/items_truncated.csv",
+      :merchants     => "./test/fixtures/merchants_truncated.csv",
+      :invoices      => "./test/fixtures/invoices_truncated.csv",
+      :invoice_items => "./test/fixtures/invoice_items_truncated.csv",
+      :transactions  => "./test/fixtures/transactions_truncated.csv",
+      :customers     => "./test/fixtures/customers_truncated.csv"
+    })
+
+    iir = InvoiceItemRepo.new(se, "./test/fixtures/invoice_items_truncated.csv")
+
+    assert_equal "#<InvoiceItemRepo 699 rows>", iir.inspect
+  end
+
 end

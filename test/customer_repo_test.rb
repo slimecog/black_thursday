@@ -113,4 +113,19 @@ class CustomerRepoTest < Minitest::Test
       assert_equal 1, invoice.customer_id
     end
   end
+
+  def test_inspect_shortens_output
+    se = SalesEngine.from_csv({
+      :items         => "./test/fixtures/items_truncated.csv",
+      :merchants     => "./test/fixtures/merchants_truncated.csv",
+      :invoices      => "./test/fixtures/invoices_truncated.csv",
+      :invoice_items => "./test/fixtures/invoice_items_truncated.csv",
+      :transactions  => "./test/fixtures/transactions_truncated.csv",
+      :customers     => "./test/fixtures/customers_truncated.csv"
+    })
+
+    cr = CustomerRepo.new(se, "./test/fixtures/customers_truncated.csv")
+
+    assert_equal "#<CustomerRepo 50 rows>", cr.inspect
+  end
 end

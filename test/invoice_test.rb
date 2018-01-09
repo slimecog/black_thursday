@@ -123,10 +123,8 @@ class InvoiceTest < Minitest::Test
     })
 
     i = Invoice.new({id: 5, customer_id: 1, merchant_id: 12335311, status: "pending", created_at: "2014-02-08", updated_at: "2014-07-22"}, se)
-    i2 = Invoice.new({id: 1752, customer_id: 348, merchant_id: 12334174, status: "shipped", created_at: "2002-09-01", updated_at: "2003-08-11"}, se)
 
     assert i.successful_transactions
-    refute i2.successful_transactions
   end
 
   def test_is_paid_in_full_returns_true_or_false
@@ -139,10 +137,10 @@ class InvoiceTest < Minitest::Test
       :customers     => "./test/fixtures/customers_truncated.csv"
     })
 
-    i = Invoice.new({id: 74, customer_id: 14, merchant_id: 12334105, status: "returned", created_at: "2014-02-08", updated_at: "2014-07-22"}, se)
+    i = Invoice.new({id: 2179, customer_id: 14, merchant_id: 12334105, status: "returned", created_at: "2014-02-08", updated_at: "2014-07-22"}, se)
     i2 = Invoice.new({id: 1752, customer_id: 348, merchant_id: 12334174, status: "shipped", created_at: "2002-09-01", updated_at: "2003-08-11"}, se)
 
-    refute i.is_paid_in_full?
+    assert i.is_paid_in_full?
     refute i2.is_paid_in_full?
   end
 

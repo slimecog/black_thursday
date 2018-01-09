@@ -350,6 +350,7 @@ class SalesAnalyst
   def merchants_ranked_by_revenue
     convert_revenue_to_merchants
   end
+  memoize :merchants_ranked_by_revenue
 
   def top_revenue_earners(count = 20)
     merchants = convert_revenue_to_merchants
