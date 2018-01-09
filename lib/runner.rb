@@ -27,4 +27,4 @@ require_relative "invoice_repo"
 
 sa = SalesAnalyst.new(se)
 
-puts sa.item_ids_of_merchant(12334105)
+puts sa.best_item_for_merchant(12334105)

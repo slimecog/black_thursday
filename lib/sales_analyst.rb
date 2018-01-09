@@ -148,18 +148,22 @@ class SalesAnalyst
   end
   memoize :invoice_diff_total_divided
 
-  def average_invoices_per_merchant_standard_deviation
+  def average_invoices_per_merchant_std_dev
     Math.sqrt(invoice_diff_total_divided).round(2)
   end
-  memoize :average_invoices_per_merchant_standard_deviation
+  memoize :average_invoices_per_merchant_std_dev
+
+  def average_invoices_per_merchant_standard_deviation
+    average_invoices_per_merchant_std_dev
+  end
 
   def invoice_count_two_stnd_deviations_above_mean
-    average_invoices_per_merchant + average_invoices_per_merchant_standard_deviation * 2
+    average_invoices_per_merchant + average_invoices_per_merchant_std_dev * 2
   end
   memoize :invoice_count_two_stnd_deviations_above_mean
 
   def invoice_count_two_stnd_deviations_below_mean
-    average_invoices_per_merchant - average_invoices_per_merchant_standard_deviation * 2
+    average_invoices_per_merchant - average_invoices_per_merchant_std_dev * 2
   end
   memoize :invoice_count_two_stnd_deviations_below_mean
 
@@ -358,40 +362,47 @@ class SalesAnalyst
       invoice.merchant_id
     end.uniq
   end
+  memoize :merchants_with_invalid_invoices
 
   def merchants_with_pending_invoices
     merchants_with_invalid_invoices.map do |merchant_id|
       sales_engine.merchants.find_by_id(merchant_id)
     end
   end
+  memoize :merchants_with_pending_invoices
 
   def merchants_with_only_one_item
     sales_engine.merchants.all.find_all do |merchant|
       merchant.items.count == 1
     end
   end
+  memoize :merchants_with_only_one_item
 
   def merchants_with_only_one_item_registered_in_month(month)
     merchants_with_only_one_item.find_all do |merchant|
       merchant.created_at.strftime("%B") == month
     end
   end
+  memoize :merchants_with_only_one_item_registered_in_month
 
   def revenue_by_merchant(merchant_id)
     invoice_totals(sales_engine.merchants.find_by_id(merchant_id).invoices)
   end
+  memoize :revenue_by_merchant
 
   def valid_invoices_of_merchant(merchant_id)
     valid_invoices.find_all do |invoice|
       invoice.merchant_id == merchant_id
     end.flatten
   end
+  memoize :valid_invoices_of_merchant
 
   def invoice_items_of_merchant(merchant_id)
     valid_invoices_of_merchant(merchant_id).map do |invoice|
       invoice.invoice_items
     end.flatten
   end
+  memoize :invoice_items_of_merchant
 
   def item_ids_of_merchant(merchant_id)
     invoice_items_of_merchant(merchant_id).reduce({}) do |result, invoice_item|
@@ -399,22 +410,54 @@ class SalesAnalyst
       result
     end
   end
+  memoize :item_ids_of_merchant
 
   def most_frequent_item_on_list(id)
     max = item_ids_of_merchant(id).values.max
     item_ids_of_merchant(id).select { |key, value|
         value == max }.to_a
   end
+  memoize :most_frequent_item_on_list
 
   def item_ids_of_most_sold_items(id)
     most_frequent_item_on_list(id).map do |value_pair|
       value_pair.first
     end
   end
+  memoize :item_ids_of_most_sold_items
 
   def most_sold_item_for_merchant(id)
     item_ids_of_most_sold_items(id).map do |item_id|
       sales_engine.items.find_by_id(item_id)
     end
   end
+  memoize :most_sold_item_for_merchant
+
+  def inv_item_freq_of_merchant(id)
+    invoice_items_of_merchant(id).reduce(Hash.new(0)) do |result, item|
+      result[item] += 1
+      result
+    end
+  end
+  memoize :inv_item_freq_of_merchant
+
+  def total_of_invoice_item_items_sold(id)
+    inv_item_freq_of_merchant(id).reduce(Hash.new(0)) do |result, (key, value)|
+      result[key] = (key.unit_price * key.quantity * value)
+      result
+    end
+  end
+  memoize :total_of_invoice_item_items_sold
+
+  def top_invoice_item_revenue(id)
+    total_of_invoice_item_items_sold(id).max_by do |_, value|
+       value
+     end
+  end
+  memoize :top_invoice_item_revenue
+
+  def best_item_for_merchant(id)
+    @sales_engine.items.find_by_id(top_invoice_item_revenue(id).first.item_id)
+  end
+  memoize :best_item_for_merchant
 end
