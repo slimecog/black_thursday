@@ -84,5 +84,24 @@ class MerchantTest < Minitest::Test
     end
   end
 
+  def test_valid_invoices_returns_valid_invoices_of_given_merchant
+    se = SalesEngine.from_csv({
+      :items         => "./data/items.csv",
+      :merchants     => "./data/merchants.csv",
+      :invoices      => "./data/invoices.csv",
+      :invoice_items => "./data/invoice_items.csv",
+      :transactions  => "./data/transactions.csv",
+      :customers     => "./data/customers.csv"
+    })
 
+    mr = MerchantRepo.new(se, "./data/merchants.csv")
+    m = mr.merchants.first
+
+    assert_instance_of Array, m.valid_invoices
+    assert_equal 5, m.valid_invoices.count
+    m.valid_invoices.each do |invoice|
+      assert_instance_of Invoice, invoice
+      assert_equal 12334105, invoice.merchant_id
+    end
+  end
 end
