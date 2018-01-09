@@ -364,4 +364,10 @@ class SalesAnalyst
       sales_engine.merchants.find_by_id(merchant_id)
     end
   end
+
+  def merchants_with_only_one_item
+    sales_engine.merchants.all.find_all do |merchant|
+      merchant.items.count == 1
+    end
+  end
 end
