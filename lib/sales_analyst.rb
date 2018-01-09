@@ -370,4 +370,51 @@ class SalesAnalyst
       merchant.items.count == 1
     end
   end
+
+  def merchants_with_only_one_item_registered_in_month(month)
+    merchants_with_only_one_item.find_all do |merchant|
+      merchant.created_at.strftime("%B") == month
+    end
+  end
+
+  def revenue_by_merchant(merchant_id)
+    invoice_totals(sales_engine.merchants.find_by_id(merchant_id).invoices)
+  end
+
+  def valid_invoices_of_merchant(merchant_id)
+    valid_invoices.find_all do |invoice|
+      invoice.merchant_id == merchant_id
+    end.flatten
+  end
+
+  def invoice_items_of_merchant(merchant_id)
+    valid_invoices_of_merchant(merchant_id).map do |invoice|
+      invoice.invoice_items
+    end.flatten
+  end
+
+  def item_ids_of_merchant(merchant_id)
+    invoice_items_of_merchant(merchant_id).reduce({}) do |result, invoice_item|
+      result[invoice_item.item_id] = invoice_item.quantity
+      result
+    end
+  end
+
+  def most_frequent_item_on_list(id)
+    max = item_ids_of_merchant(id).values.max
+    item_ids_of_merchant(id).select { |key, value|
+        value == max }.to_a
+  end
+
+  def item_ids_of_most_sold_items(id)
+    most_frequent_item_on_list(id).map do |value_pair|
+      value_pair.first
+    end
+  end
+
+  def most_sold_item_for_merchant(id)
+    item_ids_of_most_sold_items(id).map do |item_id|
+      sales_engine.items.find_by_id(item_id)
+    end
+  end
 end
