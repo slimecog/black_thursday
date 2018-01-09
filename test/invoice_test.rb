@@ -61,13 +61,13 @@ class InvoiceTest < Minitest::Test
 
   def test_items_returns_items_of_invoice
     se = SalesEngine.from_csv({
-      :items         => "./test/fixtures/items_truncated.csv",
-      :merchants     => "./test/fixtures/merchants_truncated.csv",
-      :invoices      => "./test/fixtures/invoices_truncated.csv",
-      :invoice_items => "./test/fixtures/invoice_items_truncated.csv",
-      :transactions  => "./test/fixtures/transactions_truncated.csv",
-      :customers     => "./test/fixtures/customers_truncated.csv"
-    })
+      :items         => "./data/items.csv",
+      :merchants     => "./data/merchants.csv",
+      :invoices      => "./data/invoices.csv",
+      :invoice_items => "./data/invoice_items.csv",
+      :transactions  => "./data/transactions.csv",
+      :customers     => "./data/customers.csv"
+      })
 
     i = Invoice.new({id: 5, customer_id: 1, merchant_id: 12335311, status: "pending", created_at: "2014-02-08", updated_at: "2014-07-22"}, se)
 
