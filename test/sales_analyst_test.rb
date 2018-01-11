@@ -700,14 +700,14 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_top_revenue_earners_returns_twenty_top_earners
-      se = SalesEngine.from_csv({
-        :items         => "./data/items.csv",
-        :merchants     => "./data/merchants.csv",
-        :invoices      => "./data/invoices.csv",
-        :invoice_items => "./data/invoice_items.csv",
-        :transactions  => "./data/transactions.csv",
-        :customers     => "./data/customers.csv"
-        })
+    se = SalesEngine.from_csv({
+      :items         => "./data/items.csv",
+      :merchants     => "./data/merchants.csv",
+      :invoices      => "./data/invoices.csv",
+      :invoice_items => "./data/invoice_items.csv",
+      :transactions  => "./data/transactions.csv",
+      :customers     => "./data/customers.csv"
+      })
 
     sa = SalesAnalyst.new(se)
 
@@ -793,14 +793,14 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_revenue_by_merchant_can_be_found_by_merchant_id
-      se = SalesEngine.from_csv({
-        :items         => "./test/fixtures/items_truncated.csv",
-        :merchants     => "./test/fixtures/merchants_truncated.csv",
-        :invoices      => "./test/fixtures/invoices_truncated.csv",
-        :invoice_items => "./test/fixtures/invoice_items_truncated.csv",
-        :transactions  => "./test/fixtures/transactions_truncated.csv",
-        :customers     => "./test/fixtures/customers_truncated.csv"
-      })
+    se = SalesEngine.from_csv({
+      :items         => "./test/fixtures/items_truncated.csv",
+      :merchants     => "./test/fixtures/merchants_truncated.csv",
+      :invoices      => "./test/fixtures/invoices_truncated.csv",
+      :invoice_items => "./test/fixtures/invoice_items_truncated.csv",
+      :transactions  => "./test/fixtures/transactions_truncated.csv",
+      :customers     => "./test/fixtures/customers_truncated.csv"
+    })
 
       sa = SalesAnalyst.new(se)
 
@@ -809,14 +809,14 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_most_sold_item_for_merchant_can_be_found_by_merchant_id
-        se = SalesEngine.from_csv({
-          :items         => "./data/items.csv",
-          :merchants     => "./data/merchants.csv",
-          :invoices      => "./data/invoices.csv",
-          :invoice_items => "./data/invoice_items.csv",
-          :transactions  => "./data/transactions.csv",
-          :customers     => "./data/customers.csv"
-          })
+    se = SalesEngine.from_csv({
+      :items         => "./data/items.csv",
+      :merchants     => "./data/merchants.csv",
+      :invoices      => "./data/invoices.csv",
+      :invoice_items => "./data/invoice_items.csv",
+      :transactions  => "./data/transactions.csv",
+      :customers     => "./data/customers.csv"
+      })
 
     sa = SalesAnalyst.new(se)
 
@@ -828,14 +828,14 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_best_item_for_merchant_can_be_found_by_merchant_id
-        se = SalesEngine.from_csv({
-          :items         => "./data/items.csv",
-          :merchants     => "./data/merchants.csv",
-          :invoices      => "./data/invoices.csv",
-          :invoice_items => "./data/invoice_items.csv",
-          :transactions  => "./data/transactions.csv",
-          :customers     => "./data/customers.csv"
-          })
+    se = SalesEngine.from_csv({
+      :items         => "./data/items.csv",
+      :merchants     => "./data/merchants.csv",
+      :invoices      => "./data/invoices.csv",
+      :invoice_items => "./data/invoice_items.csv",
+      :transactions  => "./data/transactions.csv",
+      :customers     => "./data/customers.csv"
+      })
 
     sa = SalesAnalyst.new(se)
 

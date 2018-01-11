@@ -2,7 +2,7 @@ require "memoist"
 
 module BusinessIntelligence
   extend Memoist
-  
+
   def find_standard_dev_difference_total
     find_items.map do |item_total|
       (item_total - average_items_per_merchant) ** 2
@@ -133,7 +133,8 @@ module BusinessIntelligence
   memoize :all_invoices_by_status
 
   def invoice_status(status)
-    (all_invoices_by_status(status).length / sales_engine.invoices.all.length.to_f * 100).round(2)
+    (all_invoices_by_status(status).length /
+    sales_engine.invoices.all.length.to_f * 100).round(2)
   end
   memoize :invoice_status
 
